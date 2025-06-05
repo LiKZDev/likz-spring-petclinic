@@ -35,7 +35,7 @@ jobs:
         env:
           IMAGE_NAME: trialsi3w0l.jfrog.io/likz-docker/spring-petclinic:${{ github.run_number }}
         run: |
-          jf docker tag spring-petclinic:3.4.0-SNAPSHOT
+          jf docker tag spring-petclinic:3.4.0-SNAPSHOT $IMAGE_NAME
           # jf docker build -t $IMAGE_NAME .
           jf docker push $IMAGE_NAME
           
