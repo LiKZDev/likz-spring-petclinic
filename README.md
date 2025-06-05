@@ -1,3 +1,14 @@
+# Instructions to run Docker Image 
+
+```
+docker login trialsi3w0l.jfrog.io -u apikey
+docker login trialsi3w0l.jfrog.io -u <username> -p <api_key>
+docker pull trialsi3w0l.jfrog.io/artifactory/likz-docker-local/spring-petclinic:2
+# Use --platform linux/amd64 if host platform is not linux/amd64
+docker run --platform linux/amd64 -d -p 8080:8080 trialsi3w0l.jfrog.io/likz-docker-local/spring-petclinic:2
+```
+
+
 # Spring PetClinic Sample Application [![Build Status](https://github.com/spring-projects/spring-petclinic/actions/workflows/maven-build.yml/badge.svg)](https://github.com/spring-projects/spring-petclinic/actions/workflows/maven-build.yml)[![Build Status](https://github.com/spring-projects/spring-petclinic/actions/workflows/gradle-build.yml/badge.svg)](https://github.com/spring-projects/spring-petclinic/actions/workflows/gradle-build.yml)
 
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/spring-projects/spring-petclinic) [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=7517918)
