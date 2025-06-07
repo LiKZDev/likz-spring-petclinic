@@ -1,5 +1,5 @@
 # Stage 1: Build the JAR
-FROM maven:3.8.6-openjdk-17 AS builder
+FROM maven:3.8.6-openjdk-18 AS builder
 WORKDIR /app
 COPY pom.xml .
 RUN mvn dependency:go-offline
