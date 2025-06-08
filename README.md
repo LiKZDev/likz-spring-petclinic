@@ -1,6 +1,10 @@
-# LiKZ Spring PetClinic Sample Application [![Build Status](https://github.com/spring-projects/spring-petclinic/actions/workflows/maven-build.yml/badge.svg)](https://github.com/spring-projects/spring-petclinic/actions/workflows/maven-build.yml)[![Build Status](https://github.com/spring-projects/spring-petclinic/actions/workflows/gradle-build.yml/badge.svg)](https://github.com/spring-projects/spring-petclinic/actions/workflows/gradle-build.yml)
+# LiKZ Spring PetClinic Sample Application [![Build Status](https://github.com/spring-projects/spring-petclinic/actions/workflows/maven-build.yml/badge.svg)](https://github.com/spring-projects/spring-petclinic/actions/workflows/maven-build.yml)
 
 ## What has been done 
+A Dockerfile has been added that uses Maven to resolve all the offline dependencies using `./mvn dependency:go-offline`. We then compiles and create the jar file needed using `./mvn package -DskipTests`. 
+
+We then copy the jar file and runs it using the jar command. 
+
 A GitHub workflow file `maven-publish-docker.yml` has been developed to trigger the pipeline with the follwing steps:
 
 1.  **Test** Job: Execute `./mvnv -B verify` to trigger a run to validate, compile and test the Spring boot application 
