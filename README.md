@@ -1,9 +1,28 @@
 # LiKZ Spring PetClinic Sample Application [![Build Status](https://github.com/spring-projects/spring-petclinic/actions/workflows/maven-build.yml/badge.svg)](https://github.com/spring-projects/spring-petclinic/actions/workflows/maven-build.yml)
 
 ## What has been done 
-A Dockerfile has been added that uses Maven to resolve all the offline dependencies using `./mvn dependency:go-offline`. We then compiles and create the jar file needed using `./mvn package -DskipTests`. 
+This repository is a fork of the original spring-petclinic that can be found here: https://github.com/spring-projects/spring-petclinic 
 
+A Dockerfile has been added that uses Maven to resolve all the offline dependencies using `./mvn dependency:go-offline`, afterwhich, it ompiles and create the jar file needed using `./mvn package -DskipTests`. 
 We then copy the jar file and runs it using the jar command. 
+
+```docker
+# Stage 1: Build the JAR
+FROM maven:3.8.6-openjdk-18 AS builder
+WORKDIR /app
+COPY pom.xml .
+RUN mvn dependency:go-offline
+COPY src/ ./src/
+RUN mvn package -DskipTests
+
+# Stage 2: Create the Docker image
+FROM openjdk:17-jdk-alpine
+WORKDIR /app
+COPY --from=builder /app/target/*.jar app.jar
+EXPOSE 8080
+ENTRYPOINT ["java", "-jar", "app.jar"]
+
+```
 
 A GitHub workflow file `maven-publish-docker.yml` has been developed to trigger the pipeline with the follwing steps:
 
@@ -18,15 +37,33 @@ The pipeline has been set up where a run will be executed whenever a push or pul
 Example of published artifactory:
 ![](./docs/images/artifactory.png "Artifactory")
 
+##  XRay Scan Data export (JSON format) for your image
+
+The XRay Scan Data exports can be found in `./reports/` directory
+
 ## Instructions to run Docker Image 
 
+Public access has been granted to the likz-docker artifactory so you should be able to pull the image directly with the following:
+```
+docker pull trialsi3w0l.jfrog.io/likz-docker-local/spring-petclinic:8
+# Use --platform linux/amd64 if host platform is not linux/amd64
+docker run --platform linux/amd64 -d -p 8080:8080 trialsi3w0l.jfrog.io/likz-docker-local/spring-petclinic:8
+```
+
+otherwise, to login: 
 ```
 docker login trialsi3w0l.jfrog.io -u apikey
 docker login trialsi3w0l.jfrog.io -u <username> -p <api_key>
-docker pull trialsi3w0l.jfrog.io/artifactory/likz-docker-local/spring-petclinic:2
+docker pull trialsi3w0l.jfrog.io/likz-docker-local/spring-petclinic:8
 # Use --platform linux/amd64 if host platform is not linux/amd64
-docker run --platform linux/amd64 -d -p 8080:8080 trialsi3w0l.jfrog.io/likz-docker-local/spring-petclinic:2
+docker run --platform linux/amd64 -d -p 8080:8080 trialsi3w0l.jfrog.io/likz-docker-local/spring-petclinic:8
 ```
+
+Once you started the docker container, please wait up 30 seconds before access the website as it takes time for the container to initialize. Once loaded, you can access it via: **localhost:8080**
+
+Example of website: 
+![](./docs/images/web.png "Web")
+
 
 # === End of LiKZ ReadMe ===
 
