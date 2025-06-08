@@ -2,11 +2,29 @@ name: Build and Tag Docker Image
 
 on:
   push:
-    branches:
-      - main
-      
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
 jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        java: [ '17' ]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up JDK ${{matrix.java}}
+        uses: actions/setup-java@v4
+        with:
+          java-version: ${{matrix.java}}
+          distribution: 'adopt'
+          cache: maven
+      - name: Build and test with Maven Wrapper
+        run: ./mvnw -B verify  # Verify runs validate, compile, test, package and additional checks
+
   build-and-tag:
+    needs: [ "test" ]
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -43,13 +61,13 @@ jobs:
           IMAGE_NAME: trialsi3w0l.jfrog.io/likz-docker/spring-petclinic:${{ github.run_number }}
         run: |
           jf docker push $IMAGE_NAME
-          
+
       - name: Publish Build info With JFrog CLI
         env:
           # Generated and maintained by GitHub
           JFROG_CLI_BUILD_NAME: jfrog-docker-build-example
           # JFrog organization secret
-          JFROG_CLI_BUILD_NUMBER : ${{ github.run_number }}
+          JFROG_CLI_BUILD_NUMBER: ${{ github.run_number }}
         run: |
           # Export the build name and build nuber
           # Collect environment variables for the build

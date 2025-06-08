@@ -1,4 +1,20 @@
-# Instructions to run Docker Image 
+# LiKZ Spring PetClinic Sample Application [![Build Status](https://github.com/spring-projects/spring-petclinic/actions/workflows/maven-build.yml/badge.svg)](https://github.com/spring-projects/spring-petclinic/actions/workflows/maven-build.yml)[![Build Status](https://github.com/spring-projects/spring-petclinic/actions/workflows/gradle-build.yml/badge.svg)](https://github.com/spring-projects/spring-petclinic/actions/workflows/gradle-build.yml)
+
+## What has been done 
+A GitHub workflow file `maven-publish-docker.yml` has been developed to trigger the pipeline with the follwing steps:
+
+1.  **Test** Job: Execute `./mvnv -B verify` to trigger a run to validate, compile and test the Spring boot application 
+2. **Build-and-tag** Job: Job with steps to use the JFrog CLI, build the docker image using the Dockerfile, and tagging and pushing it into the JFrog repository. Lastly addition build into is pushed into the JFrog repository. 
+    - Note: The following configuration for the JFrog artifactory is stored Github:
+      - `JF_URL` (variable)
+      - `JF_ACCESS_TOKEN` (secrets)
+
+The pipeline has been set up where a run will be executed whenever a push or pull request is created against the **main** branch.
+
+Example of published artifactory:
+![](./docs/images/artifactory.png "Artifactory")
+
+## Instructions to run Docker Image 
 
 ```
 docker login trialsi3w0l.jfrog.io -u apikey
@@ -8,8 +24,7 @@ docker pull trialsi3w0l.jfrog.io/artifactory/likz-docker-local/spring-petclinic:
 docker run --platform linux/amd64 -d -p 8080:8080 trialsi3w0l.jfrog.io/likz-docker-local/spring-petclinic:2
 ```
 
-
-# Spring PetClinic Sample Application [![Build Status](https://github.com/spring-projects/spring-petclinic/actions/workflows/maven-build.yml/badge.svg)](https://github.com/spring-projects/spring-petclinic/actions/workflows/maven-build.yml)[![Build Status](https://github.com/spring-projects/spring-petclinic/actions/workflows/gradle-build.yml/badge.svg)](https://github.com/spring-projects/spring-petclinic/actions/workflows/gradle-build.yml)
+# === End of LiKZ ReadMe ===
 
 [![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/spring-projects/spring-petclinic) [![Open in GitHub Codespaces](https://github.com/codespaces/badge.svg)](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=7517918)
 
